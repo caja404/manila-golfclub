@@ -1,0 +1,265 @@
+/* Caddie House TV: deliberately one dark look (a lit board in a dim room, readable across it).
+   Sizes are in --u, 1/100 of a 16:9 frame, so the same layout fills any TV. */
+.tv {
+  --tv-bg: #0c1c15;
+  --tv-panel: #11261d;
+  --tv-fg: #eef2ea;
+  --tv-dim: #8aa196;
+  --tv-rule: #24402f;
+  --tv-marker: #f0c23b;
+  --tv-marker-ink: #1a1505;
+  --tv-alert: #ff8a7a;
+  --u: min(1vw, 1.7778vh);
+
+  color-scheme: dark;
+  position: fixed;
+  inset: 0;
+  background: var(--tv-bg);
+  color: var(--tv-fg);
+  font-family: var(--font-ui);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: calc(2.2 * var(--u)) calc(2.6 * var(--u));
+  gap: calc(2 * var(--u));
+  overflow: hidden;
+  cursor: default;
+}
+.tv .num { font-variant-numeric: tabular-nums; }
+
+.tv-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: calc(0.25 * var(--u)) solid var(--tv-fg);
+  padding-bottom: calc(1 * var(--u));
+}
+.tv-brand { display: flex; flex-direction: column; gap: calc(0.3 * var(--u)); }
+.tv-brand b { font: 700 calc(3.2 * var(--u)) / 1 var(--font-sign); text-transform: uppercase; letter-spacing: 0.04em; }
+.tv-brand span { font: 500 calc(1.7 * var(--u)) / 1 var(--font-sign); text-transform: uppercase; letter-spacing: 0.14em; color: var(--tv-dim); }
+.tv-time { text-align: right; display: flex; flex-direction: column; gap: calc(0.3 * var(--u)); }
+.tv-time b { font: 600 calc(4.4 * var(--u)) / 0.9 var(--font-sign); }
+.tv-time span { font-size: calc(1.3 * var(--u)); color: var(--tv-dim); }
+
+.tv-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: calc(3 * var(--u));
+  min-height: 0;
+}
+
+.tv-h {
+  margin: 0 0 calc(1 * var(--u));
+  font: 700 calc(1.7 * var(--u)) / 1 var(--font-sign);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--tv-dim);
+  display: flex;
+  gap: calc(0.8 * var(--u));
+}
+.tv-h span { color: var(--tv-fg); }
+
+/* ---- Calls ---- */
+.tv-calls { display: flex; flex-direction: column; min-height: 0; }
+.tv-calllist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: calc(1.2 * var(--u)); }
+
+.tv { --call-h: calc(14 * var(--u)); --call-name: calc(5.2 * var(--u)); }
+.tv[data-calls='3'] { --call-h: calc(11.5 * var(--u)); --call-name: calc(4.4 * var(--u)); }
+.tv[data-calls='4'] { --call-h: calc(9.4 * var(--u)); --call-name: calc(3.6 * var(--u)); }
+
+.tv-call {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: calc(2 * var(--u));
+  align-items: center;
+  min-height: var(--call-h);
+  padding: calc(1 * var(--u)) calc(1.6 * var(--u)) calc(1 * var(--u)) calc(1 * var(--u));
+  background: var(--tv-panel);
+  border: calc(0.15 * var(--u)) solid var(--tv-rule);
+}
+.tv-plate {
+  width: calc(var(--call-h) - 2 * var(--u));
+  height: calc(var(--call-h) - 2 * var(--u));
+  border: calc(0.35 * var(--u)) solid var(--tv-marker);
+  color: var(--tv-marker);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.tv-plate small { font: 600 calc(1 * var(--u)) / 1 var(--font-ui); letter-spacing: 0.2em; text-transform: uppercase; }
+.tv-plate b { font: 700 calc(var(--call-h) * 0.52) / 0.9 var(--font-sign); }
+.tv-callbody { min-width: 0; }
+.tv-callname {
+  font: 600 var(--call-name) / 1.02 var(--font-sign);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tv-callfor { font-size: calc(1.6 * var(--u)); color: var(--tv-dim); margin-top: calc(0.5 * var(--u)); }
+.tv-callwhen { text-align: right; display: flex; flex-direction: column; gap: calc(0.4 * var(--u)); font: 600 calc(2.6 * var(--u)) / 1 var(--font-sign); }
+.tv-callwhen small { font: 500 calc(1.3 * var(--u)) / 1 var(--font-ui); color: var(--tv-dim); }
+
+/* New call: marker yellow for the first minute. A static state change; no flashing. */
+.tv-call.is-fresh { background: var(--tv-marker); border-color: var(--tv-marker); color: var(--tv-marker-ink); }
+.tv-call.is-fresh .tv-plate { border-color: var(--tv-marker-ink); color: var(--tv-marker-ink); }
+.tv-call.is-fresh .tv-callfor, .tv-call.is-fresh .tv-callwhen small { color: #4a3d0c; }
+
+.tv-call.is-late { border-color: var(--tv-alert); }
+.tv-late { color: var(--tv-alert); font-size: calc(2.2 * var(--u)); text-transform: uppercase; letter-spacing: 0.03em; }
+.tv-more { font: 600 calc(1.8 * var(--u)) / 1 var(--font-sign); color: var(--tv-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+
+.tv-nocall {
+  flex: 1;
+  border: calc(0.15 * var(--u)) dashed var(--tv-rule);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(4 * var(--u));
+  gap: calc(1.6 * var(--u));
+}
+.tv-nocall p { margin: 0; font: 600 calc(4.6 * var(--u)) / 1 var(--font-sign); text-transform: uppercase; color: var(--tv-dim); }
+.tv-nocall .tv-nextup { font-size: calc(3 * var(--u)); color: var(--tv-fg); }
+.tv-nextup b { color: var(--tv-marker); margin-right: calc(0.6 * var(--u)); }
+
+/* ---- Side column ---- */
+.tv-side { display: flex; flex-direction: column; gap: calc(2.4 * var(--u)); min-height: 0; overflow: hidden; }
+.tv-line, .tv-course, .tv-waitfor { list-style: none; margin: 0; padding: 0; }
+.tv-line li, .tv-course li {
+  display: grid;
+  grid-template-columns: calc(3 * var(--u)) calc(4.6 * var(--u)) minmax(0, 1fr);
+  gap: calc(1 * var(--u));
+  align-items: baseline;
+  padding: calc(0.55 * var(--u)) 0;
+  border-bottom: calc(0.1 * var(--u)) solid var(--tv-rule);
+}
+.tv-course li { grid-template-columns: calc(4.6 * var(--u)) minmax(0, 1fr) auto; padding: calc(0.35 * var(--u)) 0; }
+.tv-pos { font: 700 calc(2.2 * var(--u)) / 1 var(--font-sign); color: var(--tv-dim); text-align: right; }
+.tv-cart { font: 700 calc(2.6 * var(--u)) / 1 var(--font-sign); color: var(--tv-marker); }
+.tv-name { font-size: calc(1.9 * var(--u)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-line li:first-child .tv-name { font-weight: 700; }
+.tv-course .tv-cart { font-size: calc(2 * var(--u)); color: var(--tv-fg); }
+.tv-course .tv-name { font-size: calc(1.5 * var(--u)); }
+.tv-course .tv-dim { font-size: calc(1.3 * var(--u)); }
+.tv-dim { color: var(--tv-dim); font-size: calc(1.5 * var(--u)); margin: 0; }
+.tv-moreline { display: block !important; padding-top: calc(0.6 * var(--u)) !important; border: 0 !important; }
+
+.tv-waitfor li {
+  display: flex;
+  flex-direction: column;
+  gap: calc(0.3 * var(--u));
+  padding: calc(0.8 * var(--u)) calc(1 * var(--u));
+  border: calc(0.15 * var(--u)) solid var(--tv-marker);
+}
+.tv-waitfor li + li { margin-top: calc(0.6 * var(--u)); }
+.tv-waitfor b { font: 700 calc(2.4 * var(--u)) / 1 var(--font-sign); text-transform: uppercase; color: var(--tv-marker); }
+.tv-waitfor span { font-size: calc(1.4 * var(--u)); color: var(--tv-dim); }
+.tv-break { margin-top: auto; }
+
+.tv-offline {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #7d1f17;
+  color: #fff;
+  text-align: center;
+  padding: calc(0.8 * var(--u));
+  font-size: calc(1.6 * var(--u));
+}
+.tv-fs {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  background: transparent;
+  color: var(--tv-dim);
+  border: 1px solid var(--tv-rule);
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.tv-fs:hover { color: var(--tv-fg); }
+.tv-connecting { margin: auto; font: 600 calc(3 * var(--u)) / 1 var(--font-sign); color: var(--tv-dim); text-transform: uppercase; }
+
+@media (max-aspect-ratio: 1/1) {
+  .tv { overflow-y: auto; position: static; min-height: 100%; --u: 2.4vw; }
+  .tv-main { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- Fit adjustments ---- */
+.tv-line li { padding: calc(0.4 * var(--u)) 0; }
+.tv-line li.tv-cols {
+  padding: 0 0 calc(0.3 * var(--u));
+  font: 600 calc(1 * var(--u)) / 1 var(--font-ui);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tv-dim);
+}
+.tv-line li.tv-cols span:first-child { text-align: right; }
+.tv-pos { font-size: calc(1.8 * var(--u)); }
+.tv-late { font: 700 calc(3.4 * var(--u)) / 1 var(--font-sign); text-transform: none; }
+.tv-course {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: calc(1.6 * var(--u));
+}
+.tv-course li { grid-template-columns: calc(3.4 * var(--u)) minmax(0, 1fr); }
+
+/* Call row v2: name gets the full width; who-for and timing share the line below. */
+.tv-call { grid-template-columns: auto minmax(0, 1fr); }
+.tv-callmeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: calc(2 * var(--u));
+  margin-top: calc(0.6 * var(--u));
+}
+.tv-callmeta .tv-callfor { margin-top: 0; min-width: 0; }
+.tv-callwhen { flex: none; display: block; font: 600 calc(2.2 * var(--u)) / 1 var(--font-sign); }
+.tv-late { font: 700 calc(2.6 * var(--u)) / 1 var(--font-sign); text-transform: uppercase; letter-spacing: 0.02em; }
+.tv-line li { padding: calc(0.3 * var(--u)) 0; }
+.tv-name { font-size: calc(1.75 * var(--u)); }
+.tv-cart { font-size: calc(2.4 * var(--u)); }
+.tv-side { gap: calc(2 * var(--u)); }
+
+/* Scale call rows to the number of calls so four always fit. */
+.tv[data-calls='3'] { --call-h: calc(10.6 * var(--u)); --call-name: calc(4 * var(--u)); }
+.tv[data-calls='4'] { --call-h: calc(8.4 * var(--u)); --call-name: calc(3.3 * var(--u)); }
+.tv[data-calls='4'] .tv-calllist { gap: calc(0.8 * var(--u)); }
+.tv-call { padding-block: calc(0.8 * var(--u)); }
+.tv-callfor { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv[data-calls='4'] .tv-callfor, .tv[data-calls='3'] .tv-callfor { font-size: calc(1.4 * var(--u)); }
+.tv[data-calls='4'] .tv-late, .tv[data-calls='4'] .tv-callwhen { font-size: calc(2 * var(--u)); }
+
+/* Five or six calls (Call next 5): compact rows. */
+.tv[data-calls='5'] { --call-h: calc(6.9 * var(--u)); --call-name: calc(2.8 * var(--u)); }
+.tv[data-calls='6'] { --call-h: calc(5.8 * var(--u)); --call-name: calc(2.4 * var(--u)); }
+.tv[data-calls='5'] .tv-calllist, .tv[data-calls='6'] .tv-calllist { gap: calc(0.6 * var(--u)); }
+.tv[data-calls='5'] .tv-callfor, .tv[data-calls='6'] .tv-callfor { font-size: calc(1.3 * var(--u)); }
+.tv[data-calls='5'] .tv-callmeta, .tv[data-calls='6'] .tv-callmeta { margin-top: calc(0.2 * var(--u)); }
+.tv[data-calls='5'] .tv-callwhen, .tv[data-calls='6'] .tv-callwhen,
+.tv[data-calls='5'] .tv-late, .tv[data-calls='6'] .tv-late { font-size: calc(1.8 * var(--u)); }
+.tv[data-calls='5'] .tv-plate small, .tv[data-calls='6'] .tv-plate small { display: none; }
+.tv[data-calls='5'] .tv-call, .tv[data-calls='6'] .tv-call { padding-block: calc(0.5 * var(--u)); }
+
+.tv-standby {
+  margin: calc(1.4 * var(--u)) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: calc(0.6 * var(--u)) calc(2 * var(--u));
+  font-size: calc(1.5 * var(--u));
+  color: var(--tv-dim);
+}
+.tv-standby > span { font: 700 calc(1.5 * var(--u)) / 1 var(--font-sign); text-transform: uppercase; letter-spacing: 0.12em; }
+.tv-standby b { font: 700 calc(2.2 * var(--u)) / 1 var(--font-sign); color: var(--tv-marker); }
+.tv-standby b span { font: 400 calc(1.6 * var(--u)) / 1 var(--font-ui); color: var(--tv-fg); }
+.tv[data-calls='7'], .tv[data-calls='8'] { --call-h: calc(4.7 * var(--u)); --call-name: calc(2.1 * var(--u)); }
+.tv[data-calls='7'] .tv-calllist, .tv[data-calls='8'] .tv-calllist { gap: calc(0.45 * var(--u)); }
+.tv[data-calls='7'] .tv-call, .tv[data-calls='8'] .tv-call { padding-block: calc(0.35 * var(--u)); }
+.tv[data-calls='7'] .tv-plate small, .tv[data-calls='8'] .tv-plate small { display: none; }
+.tv[data-calls='7'] .tv-callmeta, .tv[data-calls='8'] .tv-callmeta { margin-top: 0; }
+.tv[data-calls='7'] .tv-callfor, .tv[data-calls='8'] .tv-callfor { font-size: calc(1.2 * var(--u)); }
+.tv[data-calls='7'] .tv-callwhen, .tv[data-calls='8'] .tv-callwhen,
+.tv[data-calls='7'] .tv-late, .tv[data-calls='8'] .tv-late { font-size: calc(1.6 * var(--u)); }

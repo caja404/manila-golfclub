@@ -1,0 +1,98 @@
+.tab-count { color: var(--flag); font-weight: 600; }
+
+.master-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.master-grid + .section { margin-top: 28px; }
+@media (max-width: 1080px) {
+  .master-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- Queue ---- */
+.qlist { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); }
+.qlist li {
+  display: grid;
+  grid-template-columns: 32px 48px minmax(0, 1fr) 96px auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.qlist li:last-child { border-bottom: 0; }
+.qlist li.is-break { background: var(--sunk); }
+.qlist li.is-break .q-name { color: var(--ink-3); }
+.q-pos { font: 700 22px/1 var(--font-sign); color: var(--ink-3); text-align: right; }
+.q-cart { font: 700 22px/1 var(--font-sign); letter-spacing: 0.02em; }
+.q-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.q-actions { display: flex; gap: 4px; justify-content: flex-end; }
+@media (max-width: 720px) {
+  .qlist li { grid-template-columns: 28px 40px minmax(0, 1fr); }
+  .qlist li .status { grid-column: 3; }
+  .q-actions { grid-column: 1 / -1; justify-content: flex-start; flex-wrap: wrap; }
+}
+
+.offlist { list-style: none; margin: 0; padding: 0; }
+.offlist li { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); gap: 12px; }
+
+/* ---- Check-in ---- */
+.checkin { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); }
+.checkin li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.checkin li:last-child { border-bottom: 0; }
+.ci-who { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; min-width: 0; }
+.ci-cart { display: flex; align-items: center; gap: 8px; }
+.ci-cart .input { height: 40px; }
+
+.cartmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 6px; }
+.cartcell {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 6px 8px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.cartcell b { font: 700 24px/1 var(--font-sign); }
+.cartcell span { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink-2); }
+.cartcell.is-free { border: 1px dashed var(--rule-strong); background: transparent; }
+.cartcell.is-free b, .cartcell.is-free span { color: var(--ink-3); }
+
+/* ---- Designated ---- */
+.filters { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; }
+.filters .input { max-width: 360px; }
+.check { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; }
+.des-select { height: 38px; max-width: 320px; }
+
+/* ---- Reports ---- */
+.reports { display: flex; flex-direction: column; gap: 24px; }
+.report-range { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.report-range .input { width: 170px; }
+.summary { display: flex; flex-wrap: wrap; gap: 12px 48px; margin: 0; padding: 14px 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule-strong); }
+.summary dt { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-2); }
+.summary dd { margin: 2px 0 0; font: 700 40px/1 var(--font-sign); }
+.bar-cell { width: 30%; min-width: 60px; padding-left: 0 !important; }
+.bar { display: block; height: 10px; background: var(--fairway); }
+.qlist li.q-cols {
+  padding-block: 8px 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-2);
+  border-bottom-color: var(--rule-strong);
+}
+.qlist li.q-cols span:first-child { text-align: right; }
+.q-pos { font-size: 18px; }
+@media (max-width: 720px) { .qlist li.q-cols { display: none; } }
+.master-grid > .section + .section { margin-top: 0; }
+table.data td .muted.small.num { white-space: nowrap; }

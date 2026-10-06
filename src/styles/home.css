@@ -1,0 +1,21 @@
+.home { max-width: 880px; }
+.home h1 { font: 700 34px/1 var(--font-sign); text-transform: uppercase; letter-spacing: 0.03em; margin: 16px 0 10px; }
+.home-lede { color: var(--ink-2); max-width: 60ch; margin: 0 0 24px; }
+.stations { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.stations a {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 6px 24px;
+  align-items: baseline;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--rule-strong);
+  text-decoration: none;
+  color: inherit;
+}
+.stations a:hover b { color: var(--fairway); text-decoration: underline; text-underline-offset: 4px; }
+.stations b { font: 700 26px/1.1 var(--font-sign); text-transform: uppercase; letter-spacing: 0.03em; }
+.stations span { color: var(--ink-2); }
+.home-now { margin-top: 20px; color: var(--ink-3); font-size: 14px; }
+@media (max-width: 640px) {
+  .stations a { grid-template-columns: minmax(0, 1fr); }
+}
